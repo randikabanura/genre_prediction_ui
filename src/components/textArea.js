@@ -131,7 +131,7 @@ function FormDisabledExample() {
         }
     };
 
-    const onReset = async(e) => {
+    const onReset = async (e) => {
         e.preventDefault();
         setLoading(true);
         setData({})
@@ -140,6 +140,13 @@ function FormDisabledExample() {
 
     return (
         <>
+            <div style={{ display: loading ? 'flex' : 'none' }} className='modal'>
+                <div className='modal-content'>
+                    <div className='loader'></div>
+                    <div className='modal-text'>Loading the results...<br/>Predicting the Genre takes sometime.</div>
+                </div>
+            </div>
+
             <h1><strong>Lyrics Genre Prediction</strong></h1>
             <Form
                 onSubmit={onSubmit}
@@ -167,7 +174,7 @@ function FormDisabledExample() {
                         }}
                     />
                 </Form.Group>
-                <Form.Group style={{display: "flex", justifyContent: "center" }}>
+                <Form.Group style={{display: "flex", justifyContent: "center"}}>
                     <Button
                         type="submit"
                         style={{
