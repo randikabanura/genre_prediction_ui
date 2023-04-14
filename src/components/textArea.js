@@ -78,7 +78,7 @@ function FormDisabledExample() {
                     width={width}
                     height={height}
                     style={{
-                        fill: depth < 2 ? colors[Math.floor((index % 20))] : '#ffffff00',
+                        fill: depth < 2 ? colors[index] : '#ffffff00',
                         stroke: '#fff',
                         strokeWidth: 2 / (depth + 1e-10),
                         strokeOpacity: 1 / (depth + 1e-10),
@@ -163,7 +163,7 @@ function FormDisabledExample() {
                         style={{
                             fontSize: "16px",
                             borderRadius: "4px",
-                            borderColor: "#ccc",
+                            borderColor: "#ccc"
                         }}
                     />
                 </Form.Group>
@@ -268,7 +268,7 @@ function FormDisabledExample() {
                             <Tooltip content={<CustomTooltip/>}/>
                             <Bar dataKey="value" fill="#8884d8">
                                 {chartData.map((entry, index) => (
-                                    <Cell key={`cell-${index}`} cursor="pointer" fill={COLORS[index % 20]}/>
+                                    <Cell key={`cell-${index}`} cursor="pointer" fill={COLORS[index]}/>
                                 ))}
                             </Bar>
                         </BarChart>
