@@ -22,7 +22,10 @@ import {
 import '../App.css'
 
 function FormDisabledExample() {
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState({
+        modal: false,
+        type: 'predict'
+    });
     const [data, setData] = useState({});
     const [formData, setFormData] = useState({
         lyrics: "",
@@ -111,22 +114,30 @@ function FormDisabledExample() {
         try {
             const config = {
                 headers: {
-                    "Content-type": "application/json",
+                    "Content-Type": "text/plain",
                 },
             };
-            setLoading(true);
+            setLoading({
+                modal: true,
+                type: 'predict'
+            });
             // make request
             let {data} = await axios.post(
                 "http://localhost:9090/lyrics/predict",
-                {
-                    lyrics,
-                },
+                lyrics,
                 config
             );
             delete data.genre
             setData(data);
-            setLoading(false);
+            setLoading({
+                modal: false,
+                type: 'predict'
+            });
         } catch (error) {
+            setLoading({
+                modal: false,
+                type: 'predict'
+            });
             console.log(error);
         }
     };
@@ -138,12 +149,43 @@ function FormDisabledExample() {
         setLoading(false)
     };
 
+    const onTrainSubmit = async (e) => {
+        e.preventDefault();
+        try {
+            const config = {
+                headers: {
+                    "Content-type": "application/json",
+                },
+            };
+            setLoading({
+                modal: true,
+                type: 'train'
+            });
+            // make request
+            let {data} = await axios.get(
+                "http://localhost:9090/lyrics/train",
+                config
+            );
+            setLoading({
+                modal: false,
+                type: 'train'
+            });
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
     return (
         <>
-            <div style={{ display: loading ? 'flex' : 'none' }} className='modal'>
+            <div style={{display: loading.modal ? 'flex' : 'none'}} className='modal'>
                 <div className='modal-content'>
                     <div className='loader'></div>
-                    <div className='modal-text'>Loading the results...<br/>Predicting the Genre takes sometime.</div>
+                    {loading.type === 'train' ?
+                        <div className='modal-text'>Training the model...<br/>This takes lot of time.
+                        </div> :
+                        <div className='modal-text'>Loading the results...<br/>Predicting the Genre takes sometime.
+                        </div>
+                    }
                 </div>
             </div>
 
@@ -196,6 +238,24 @@ function FormDisabledExample() {
                         }}
                     >
                         Clear
+                    </Button>
+                </Form.Group>
+            </Form>
+
+            <Form
+                onSubmit={onTrainSubmit}
+            >
+                <Form.Group style={{display: "flex", justifyContent: "center"}}>
+                    <Button
+                        type="submit"
+                        style={{
+                            backgroundColor: "#007bff",
+                            borderColor: "#007bff",
+                            fontSize: "16px",
+                            marginTop: "30px"
+                        }}
+                    >
+                        Train the Model
                     </Button>
                 </Form.Group>
             </Form>
